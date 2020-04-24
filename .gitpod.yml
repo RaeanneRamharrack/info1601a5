@@ -1,0 +1,11 @@
+image:
+  file: .gitpod.dockerfile
+  
+tasks:
+  - init: npm install
+    command: npm install
+
+# Ports to expose on workspace startup (optional)
+ports:
+  - port: 8080
+    onOpen: open-browser
