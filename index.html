@@ -1,4 +1,5 @@
-<!DOCTYPE html>
+<!-- 816008940-->
+<!DOCTYPE html> 
 <html>
   <head>
         <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
@@ -8,42 +9,115 @@
         <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
 
         <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+        <title> Poke Dextr </title>
+        <style>
+            #listing{
+                max-height: 600px;
+                overflow: scroll;
+            }
+            #result{
+                margin-top: 100px;
+                margin-bottom: 100px;
+                background-color: purple;
+                height: 150px;
+                width: 250px;
+                margin-left: 200px;
+                margin-right: 200px;
+                float
 
+            }
+            .column {
+                float: left;
+            }
+            .left{
+                width: 15%;
+                margin: 3%;
+            }
+            tr:hover{
+                background-color: black;
+            }
+        </style>
 
   </head>
 
   <body>
+    <nav>
+        <div class="nav-wrapper purple" style="padding-left: 10px;">
+           <h1 class="brand-logo" style="margin-top: 10px">Poke Dextr</h1>
+           <a href="index.html" style="float: right;">Listing</a>
+        </div>
+    </nav>
 
+    <main class="row">
+        <table class="column left">
+            <tbody id="listing" class="collection-item"> 
+            </tbody>
+        </table>
+        
+        <div class="column">
+            <div class="card column">
+                <div id="result" class="card-content white-text ">
+                </div>
+            </div>
+        </div>
 
-
+    </main>
 
     <script>
-
-     
-
         async function getPokemonDetail(pokemonName){
             //performs http request to the specifed url with the given pokemon name to get pokemon data then pass it to displayPokemonDetail()
-           
+           let url = 'https://pokedextr.herokuapp.com/pokemon/';
+           try
+           {
+                let response = await fetch(url + pokemonName);
+                let result = await response.json();
+                displayPokemonDetail(result);
+            }
+            catch(e){
+                console.log(e);
+            }
         }
 
         async function getAllPokemon(){
           //performs a http request to the specified url to get pokemon data then pass it to displayAllPokemon()
-
+            let url = 'https://pokedextr.herokuapp.com/pokemon';
+           try
+           {
+                let response = await fetch(url);
+                let result = await response.json();
+                displayAllPokemon(result);
+            }
+            catch(e){
+                console.log(e);
+            }
         }
 
         function displayAllPokemon(pokeList){
            //Renders a list of pokemon links to the page 
-          
+           let result = document.querySelector('#listing');
+            //add html code inside of result 
+            for(let pokemon of pokeList){
+                result.innerHTML += `<tr>
+                <td>
+                    <a id=${pokemon.name} onclick="getPokemonDetail('${pokemon.name}')" class="collection-item" >${pokemon.name}</a>  
+                </td>
+                </tr>`;
+            }
         }
 
         function displayPokemonDetail(pokemon){
           //renders details of the specified pokemon onto the page
-           
+           let result = document.querySelector('#result');
+            //add html code inside of result 
+            result.innerHTML = `
+                <p class="column">ID:     </p> <p class="column" style="float: right;">${pokemon.id}</p> </br>
+                <p class="column">NAME:     </p> <p class="column" style="float: right;">${pokemon.name}</p>  </br>
+                <p class="column">TYPE1:     </p> <p class="column" style="float: right;">${pokemon.type1}</p> </br>
+                <p class="column">WEIGHT:     </p> <p class="column" style="float: right;">${pokemon.weight}</p> </br>
+                <p class="column">HEIGHT:     </p> <p class="column" style="float: right;">${pokemon.height}</p>`
         }
-
         getAllPokemon();
-       
+        getPokemonDetail('bulbasaur');
     </script>
-        
   </body>
 </html>
